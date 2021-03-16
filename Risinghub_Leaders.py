@@ -6,7 +6,7 @@ import requests
 import asyncio
 import math
 
-# prefix
+# bot prefix
 client = commands.Bot(command_prefix="!")
 
 # to remove builtin help command
@@ -32,7 +32,7 @@ async def on_command_error(ctx, error):
     else:
         print(error, on_command_error)
 
-# rising hub logo
+# risinghub logo
 gameicon = "https://cdn.discordapp.com/attachments/710552597886664774/821345909883011082/rh_logo.png"
 
 leaderboards = '''
@@ -125,7 +125,6 @@ async def top(ctx,*value):
         response3 = ses.get(url3)
         soup2 = BeautifulSoup(response3.text, "html.parser")
         test = soup2.find("table")
-        data = []
         table_body = soup2.find('tbody')
         rows = table_body.find_all('tr')
         for index, row in enumerate(rows):
