@@ -13,7 +13,7 @@ client = commands.Bot(command_prefix="!")
 client.remove_command("help")
 
 # bot token
-token = "ODIxMTI5NDYzNDYyNjI1MzAw.YE_OZw.HiS-adFeESreYEi3-tEgz9vjjbo"
+token = "TOKEN HERE"
 
 # on ready & presence activity event
 @client.event
@@ -89,7 +89,7 @@ async def top(ctx,*value):
 
         # login
         url2 = "https://risinghub.net/login"
-        username, password = "freefire", "omar1230"
+        username, password = "USERNAME HERE", "PASSWORD HERE"
         data = f"_token={token}&username={username}&password={password}&submit="
         headers = {
             "content-type": "application/x-www-form-urlencoded",
@@ -141,4 +141,5 @@ async def top(ctx,*value):
         embed.add_field(name="Error", value="Value is not found, ``!help`` for usage info.", inline=False)
         await ctx.send(embed=embed)  
 
+        
 client.run(token)
