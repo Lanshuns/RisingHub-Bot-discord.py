@@ -43,7 +43,7 @@ leaderboards = '''
 
 # help
 @client.command(pass_context=True, aliases=['Help'])
-@commands.cooldown(1, 5, commands.BucketType.user)
+@commands.cooldown(1, 5, commands.BucketType.user) # cooldown: 1 is the number of tries & 5 is the seconds
 async def help(ctx):
     async with ctx.typing():
         embed = discord.Embed(
@@ -63,7 +63,7 @@ async def help(ctx):
 
 # leaderboards
 @client.command(aliases=['Top', 'TOP'])
-@commands.cooldown(1, 5, commands.BucketType.user)
+@commands.cooldown(1, 5, commands.BucketType.user) # cooldown: 1 is the number of tries & 5 is the seconds
 async def top(ctx,*value):
     async with ctx.typing():
         embed = discord.Embed(
