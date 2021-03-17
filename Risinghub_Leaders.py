@@ -36,8 +36,10 @@ async def on_command_error(ctx, error):
 
 # ping 
 @client.command()
+@commands.cooldown(1, 60, commands.BucketType.user)
 async def ping(ctx):
-    await ctx.send(f"**{round(client.latency *1000)}** milliseconds!")
+    async with ctx.typing():
+        await ctx.send(f"**{round(client.latency *1000)}** milliseconds!") # cooldown: 1 is the number of tries and 60 is the time in seconds
 
 # logout the bot
 @client.command(hidden=False, aliases=['Kill', 'logout', 'Logout'])
