@@ -6,8 +6,9 @@ import requests
 import asyncio
 import math
 
+
 # bot prefix
-client = commands.Bot(command_prefix="PREFIX_HERE")
+client = commands.Bot(command_prefix="!")
 
 # to remove builtin help command
 client.remove_command("help")
@@ -15,11 +16,12 @@ client.remove_command("help")
 # bot token
 token = "TOKEN_HERE"
 
+
 # on ready & presence activity event
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Game("battlefield heroes | !help"))
-    print("Ready")
+    print('{0.user} bot is ready'.format(client))
 
 # cooldown event
 @client.event
@@ -32,8 +34,27 @@ async def on_command_error(ctx, error):
     else:
         print(error, on_command_error)
 
+# ping 
+@client.command()
+async def ping(ctx):
+    await ctx.send(f"**{round(client.latency *1000)}** milliseconds!")
+
+# logout the bot
+@client.command(hidden=False, aliases=['Kill', 'logout', 'Logout'])
+@commands.cooldown(1, 60, commands.BucketType.user)
+async def kill(ctx):
+    async with ctx.typing():
+        dev_id = ID_HERE # it should be an int, for example: dev_id = 289106753277263872
+        if dev_id == ctx.author.id:
+            await client.logout()
+            await client.close()
+            await ctx.send("the bot has logged out")
+        else:
+            await ctx.send("you don't have permission to this command.")
+
+
 # risinghub logo
-gameicon = "https://cdn.discordapp.com/attachments/710552597886664774/821345909883011082/rh_logo.png"
+rh_logo = "https://cdn.discordapp.com/attachments/710552597886664774/821345909883011082/rh_logo.png"
 
 usage = '''
 !top elo, !top score, !top level, !top vp,
@@ -41,19 +62,6 @@ usage = '''
 !top time, !top kills, !top assists,
 !top killstreak, !top deathstreak, 
 '''
-
-# logout the bot
-@client.command(hidden=False, aliases=['Kill', 'logout', 'Logout'])
-@commands.cooldown(1, 5, commands.BucketType.user) # cooldown: 1 is the number of tries & 5 is the seconds.
-async def kill(ctx):
-    dev_id = ID_HERE # it should be an int, for example: dev_id = 289106753277263872
-    if dev_id == ctx.author.id:
-        await client.logout()
-        await client.close()
-        await ctx.send("the bot has logged out")
-    else:
-        await ctx.send("you don't have permission to this command.")
-
 
 # help
 @client.command(pass_context=True, aliases=['Help'])
@@ -65,7 +73,7 @@ async def help(ctx):
             color = discord.Color.green()
         )
 
-        embed.set_thumbnail(url=gameicon)
+        embed.set_thumbnail(url=rh_logo)
         
         embed.set_author(name="RisingHub leaderboards")
 
@@ -74,7 +82,6 @@ async def help(ctx):
         embed.add_field(name="Other", value="**!ping |** [RisingHub](https://risinghub.net/) **|** [RisingHub Leaderboard](https://risinghub.net/leaderboard/score)\n \n Developer: <@289106753277263872>", inline=False)
 
         await ctx.send(embed=embed)
-
 
 # leaderboards
 @client.command(aliases=['Top', 'TOP'])
@@ -167,7 +174,7 @@ async def top(ctx,*value):
             idx, name, score = [ele.text.strip() for ele in td]
             if index == 10:
                 break
-            embed.set_thumbnail(url=gameicon)
+            embed.set_thumbnail(url=rh_logo)
             embed.add_field(name=f"[{idx}] {name}", value=f"{score}", inline=False)
             embed.set_footer(text="Rising Hub Leaderboard active in 30 days.")
         await ctx.send(embed=embed)
@@ -175,6 +182,5 @@ async def top(ctx,*value):
         embed.add_field(name="Error", value="Value is not found, ``!help`` for usage info.", inline=False)
         await ctx.send(embed=embed)  
 
-     
-    
+
 client.run(token)
