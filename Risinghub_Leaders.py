@@ -44,6 +44,7 @@ usage = '''
 
 # logout the bot
 @client.command(hidden=False, aliases=['Kill', 'logout', 'Logout'])
+@commands.cooldown(1, 5, commands.BucketType.user) # cooldown: 1 is the number of tries & 5 is the seconds.
 async def kill(ctx):
     dev_id = ID_HERE # it should be an int, for example: dev_id = 289106753277263872
     if dev_id == ctx.author.id:
@@ -56,7 +57,7 @@ async def kill(ctx):
 
 # help
 @client.command(pass_context=True, aliases=['Help'])
-@commands.cooldown(1, 5, commands.BucketType.user) # cooldown: 1 is the number of tries & 5 is the seconds.
+@commands.cooldown(1, 5, commands.BucketType.user)
 async def help(ctx):
     async with ctx.typing():
         embed = discord.Embed(
@@ -73,6 +74,7 @@ async def help(ctx):
         embed.add_field(name="Other", value="**!ping |** [RisingHub](https://risinghub.net/) **|** [RisingHub Leaderboard](https://risinghub.net/leaderboard/score)\n \n Developer: <@289106753277263872>", inline=False)
 
         await ctx.send(embed=embed)
+
 
 # leaderboards
 @client.command(aliases=['Top', 'TOP'])
@@ -173,4 +175,6 @@ async def top(ctx,*value):
         embed.add_field(name="Error", value="Value is not found, ``!help`` for usage info.", inline=False)
         await ctx.send(embed=embed)  
 
+     
+    
 client.run(token)
