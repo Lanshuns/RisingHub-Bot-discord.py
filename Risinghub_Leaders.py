@@ -35,10 +35,11 @@ async def on_command_error(ctx, error):
 # risinghub logo
 gameicon = "https://cdn.discordapp.com/attachments/710552597886664774/821345909883011082/rh_logo.png"
 
-leaderboards = '''
-    ``!top elo``, ``!top score``, ``!top level``, ``!top vp``, ``!top time``,
-    ``!top kills``, ``!top assists``, ``!top deaths``, ``!top capture``,
-    ``!top killstreak``, ``!top deathstreak``, ``!top prestige``
+usage = '''
+!top elo, !top score, !top level, !top vp,
+!top time, !top kills, !top assists,
+!top deaths, !top capture, !top killstreak,
+!top deathstreak, !top prestige
 '''
 
 # help
@@ -55,7 +56,7 @@ async def help(ctx):
         
         embed.set_author(name="RisingHub leaderboards")
 
-        embed.add_field(name="Usage", value=leaderboards, inline=False)
+        embed.add_field(name="Usage", value=usage, inline=False)
 
         embed.add_field(name="Links", value="[RisingHub](https://risinghub.net/) **|** [RisingHub Leaderboard](https://risinghub.net/leaderboard/score)\n \n Developer: <@289106753277263872>", inline=False)
 
@@ -124,7 +125,7 @@ async def top(ctx,*value):
             url3 = "https://risinghub.net/leaderboard/prestige"
         response3 = ses.get(url3)
         soup2 = BeautifulSoup(response3.text, "html.parser")
-        test = soup2.find("table")
+        table = soup2.find("table")
         table_body = soup2.find('tbody')
         rows = table_body.find_all('tr')
         for index, row in enumerate(rows):
