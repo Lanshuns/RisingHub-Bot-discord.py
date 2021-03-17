@@ -27,19 +27,19 @@ async def on_ready():
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
-       msg = await ctx.send("Cooldown soldier!! please retry in **{}s**.".format(math.ceil(error.retry_after)))
-       await asyncio.sleep(5) 
-       await msg.delete()
-       await asyncio.sleep(6)
+        msg = await ctx.send("Cooldown soldier!! please retry in **{}s**.".format(math.ceil(error.retry_after)))
+        await asyncio.sleep(5) 
+        await msg.delete()
+        await asyncio.sleep(6)
     else:
         print(error, on_command_error)
 
 # ping 
 @client.command()
-@commands.cooldown(1, 60, commands.BucketType.user)
+@commands.cooldown(1, 5, commands.BucketType.user) # cooldown: 1 is the number of tries and 5 is the time in seconds
 async def ping(ctx):
     async with ctx.typing():
-        await ctx.send(f"**{round(client.latency *1000)}** milliseconds!") # cooldown: 1 is the number of tries and 60 is the time in seconds
+        await ctx.send(f"**{round(client.latency *1000)}** milliseconds!")
 
 # logout the bot
 @client.command(hidden=False, aliases=['Kill', 'logout', 'Logout'])
@@ -48,11 +48,11 @@ async def kill(ctx):
     async with ctx.typing():
         dev_id = ID_HERE # it should be an int, for example: dev_id = 289106753277263872
         if dev_id == ctx.author.id:
+            await ctx.send("The bot has logged out!")
             await client.logout()
             await client.close()
-            await ctx.send("the bot has logged out")
         else:
-            await ctx.send("you don't have permission to this command.")
+            await ctx.send("You don't have permission to this command.")
 
 
 # risinghub logo
@@ -62,7 +62,7 @@ usage = '''
 !top elo, !top score, !top level, !top vp,
 !top deaths, !top capture, !top prestige,
 !top time, !top kills, !top assists,
-!top killstreak, !top deathstreak, 
+!top killstreak, !top deathstreak
 '''
 
 # help
@@ -81,7 +81,7 @@ async def help(ctx):
 
         embed.add_field(name="Usage", value=usage, inline=False)
 
-        embed.add_field(name="Other", value="**!ping |** [RisingHub](https://risinghub.net/) **|** [RisingHub Leaderboard](https://risinghub.net/leaderboard/score)\n \n Developer: <@289106753277263872>", inline=False)
+        embed.add_field(name="Other", value="!ping **|** [RisingHub](https://risinghub.net/) **|** [RisingHub Leaderboard](https://risinghub.net/leaderboard/score)\n \n Developer: <@289106753277263872>", inline=False)
 
         await ctx.send(embed=embed)
 
@@ -95,7 +95,7 @@ async def top(ctx,*value):
             color = discord.Color.green()
         )
     if not value:
-        embed.add_field(name="Error", value="Value is not supplied, ``!help`` for usage info.", inline=False)
+        embed.add_field(name="Error", value="Value is not supplied, **!help** for usage info.", inline=False)
         await ctx.send(embed=embed)
         return        
 
@@ -140,30 +140,33 @@ async def top(ctx,*value):
             print("Something went wrong")
 
         # leaderboard
-        if value[0] == ["elo", "Elo"]:
+        if value[0] in ["elo", "Elo"]:
             url3 = "https://risinghub.net/leaderboard/elo"
-        elif value[0] == ['score', 'Score']:
+        elif value[0] in ['score', 'Score']:
             url3 = "https://risinghub.net/leaderboard/score"
-        elif value[0] == ['level', 'Level']:
+        elif value[0] in ['level', 'Level']:
             url3 = "https://risinghub.net/leaderboard/level"
-        elif value[0] in ["vp","Vp", "VP"]:
+        elif value[0] in ["vp", "Vp", "VP"]:
             url3 = "https://risinghub.net/leaderboard/vp"
-        elif value[0] == ['time', 'Time']:
+        elif value[0] in ['time', 'Time']:
             url3 = "https://risinghub.net/leaderboard/time"
-        elif value[0] == ['kills', 'Kills']:
+        elif value[0] in ['kills', 'Kills']:
             url3 = "https://risinghub.net/leaderboard/kills"
-        elif value[0] == ['assists', 'Assists']:
+        elif value[0] in ['assists', 'Assists']:
             url3 = "https://risinghub.net/leaderboard/assists"
-        elif value[0] == ['deaths', 'Deaths']:
+        elif value[0] in ['deaths', 'Deaths']:
             url3 = "https://risinghub.net/leaderboard/deaths"
-        elif value[0] == ['capture', 'Capture']:
+        elif value[0] in ['capture', 'Capture']:
             url3 = "https://risinghub.net/leaderboard/capture"
-        elif value[0] == ['killstreak', 'Killstreak']:
+        elif value[0] in ['killstreak', 'Killstreak']:
             url3 = "https://risinghub.net/leaderboard/kill_streak"
-        elif value[0] == ['deathstreak', 'Deathstreak']:
+        elif value[0] in ['deathstreak', 'Deathstreak']:
             url3 = "https://risinghub.net/leaderboard/death_streak"
-        elif value[0] == ['prestige', 'Prestige']:
+        elif value[0] in ['prestige', 'Prestige']:
             url3 = "https://risinghub.net/leaderboard/prestige"
+        else:
+            pass
+
         try:
             response3 = ses.get(url3)
         except Exception:
@@ -181,8 +184,7 @@ async def top(ctx,*value):
             embed.set_footer(text="Rising Hub Leaderboard active in 30 days.")
         await ctx.send(embed=embed)
     else:
-        embed.add_field(name="Error", value="Value is not found, ``!help`` for usage info.", inline=False)
-        await ctx.send(embed=embed)  
-
+        embed.add_field(name="Error", value="Value is not found, **!help** for usage info.", inline=False)
+        await ctx.send(embed=embed) 
 
 client.run(token)
