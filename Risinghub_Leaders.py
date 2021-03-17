@@ -7,7 +7,7 @@ import asyncio
 import math
 
 # bot prefix
-client = commands.Bot(command_prefix="!")
+client = commands.Bot(command_prefix="PREFIX_HERE")
 
 # to remove builtin help command
 client.remove_command("help")
