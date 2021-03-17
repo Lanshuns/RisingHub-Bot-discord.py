@@ -8,7 +8,7 @@ import math
 
 
 # bot prefix
-client = commands.Bot(command_prefix="!")
+client = commands.Bot(command_prefix="YOUR_PREFIX")
 
 # to remove builtin help command
 client.remove_command("help")
