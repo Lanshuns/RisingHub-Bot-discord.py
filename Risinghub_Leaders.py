@@ -20,7 +20,7 @@ token = "TOKEN_HERE"
 # on ready & presence activity event
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Game("battlefield heroes | !help"))
+    await client.change_presence(activity=discord.Game("battlefield heroes"))
     print('{0.user} bot is ready'.format(client))
 
 # cooldown event
@@ -59,10 +59,10 @@ async def kill(ctx):
 rh_logo = "https://cdn.discordapp.com/attachments/710552597886664774/821345909883011082/rh_logo.png"
 
 usage = '''
-!top elo, !top score, !top level, !top vp,
-!top deaths, !top capture, !top prestige,
-!top time, !top kills, !top assists,
-!top killstreak, !top deathstreak
+top elo, top score, top level, top vp,
+top deaths, top capture, top prestige,
+top time, top kills, top assists,
+top killstreak, top deathstreak
 '''
 
 # help
@@ -81,7 +81,7 @@ async def help(ctx):
 
         embed.add_field(name="Usage", value=usage, inline=False)
 
-        embed.add_field(name="Other", value="!ping **|** [RisingHub](https://risinghub.net/) **|** [RisingHub Leaderboard](https://risinghub.net/leaderboard/score)\n \n Developer: <@289106753277263872>", inline=False)
+        embed.add_field(name="Other", value="ping **|** [RisingHub](https://risinghub.net/) **|** [RisingHub Leaderboard](https://risinghub.net/leaderboard/score)\n \n Developer: <@289106753277263872>", inline=False)
 
         await ctx.send(embed=embed)
 
@@ -95,7 +95,7 @@ async def top(ctx,*value):
             color = discord.Color.green()
         )
     if not value:
-        embed.add_field(name="Error", value="Value is not supplied, **!help** for usage info.", inline=False)
+        embed.add_field(name="Error", value="Value is not supplied, use **help** command for usage info.", inline=False)
         await ctx.send(embed=embed)
         return        
 
@@ -184,7 +184,7 @@ async def top(ctx,*value):
             embed.set_footer(text="Rising Hub Leaderboard active in 30 days.")
         await ctx.send(embed=embed)
     else:
-        embed.add_field(name="Error", value="Value is not found, **!help** for usage info.", inline=False)
+        embed.add_field(name="Error", value="Value is not found, use **help** command for usage info.", inline=False)
         await ctx.send(embed=embed) 
 
 client.run(token)
