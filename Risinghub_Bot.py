@@ -16,9 +16,6 @@ client.remove_command("help")
 # bot token
 token = "TOKEN_HERE"
 
-# risinghub logo
-rh_logo = "https://cdn.discordapp.com/attachments/710552597886664774/821345909883011082/rh_logo.png"
-
 # on ready event & presence activity
 @client.event
 async def on_ready():
@@ -43,7 +40,7 @@ async def ping(ctx):
     async with ctx.typing():
         await ctx.send(f"**{round(client.latency *1000)}** milliseconds!")
 
-# logout bot
+# logout the bot
 @client.command(hidden=False, aliases=['Kill', 'logout', 'Logout'])
 @commands.cooldown(1, 60, commands.BucketType.user)
 async def kill(ctx):
@@ -56,22 +53,9 @@ async def kill(ctx):
         else:
             await ctx.send("You don't have permission to this command.")
 
-
-# help
-@client.command(pass_context=True, aliases=['Help'])
-@commands.cooldown(1, 5, commands.BucketType.user)
-async def help(ctx):
-    async with ctx.typing():
-        embed = discord.Embed(
-            color = discord.Color.green()
-        )
-
-        embed.set_author(name="RisingHub's bot")
-        embed.set_thumbnail(url=rh_logo)
-        embed.add_field(name="Commands", value="!top, !hero, !stats, !team, !ping", inline=False)
-        embed.add_field(name="Links", value="[INVITE TO YOUR SERVER](https://discord.com/api/oauth2/authorize?client_id=821129463462625300&permissions=318528&scope=bot) **|** [Rising Hub](https://risinghub.net/) \n \n Developer: <@289106753277263872>", inline=False)
-        await ctx.send(embed=embed)
-
+            
+# risinghub logo
+rh_logo = "https://cdn.discordapp.com/attachments/710552597886664774/821345909883011082/rh_logo.png"
 
 leaderboards = '''
 !top elo, !top score, !top level, !top vp,
@@ -95,8 +79,71 @@ staff = '''
 dev = '''
 [Maybeads](https://risinghub.net/profile/Maybeads)
 '''
+invite_link = 'https://discord.com/api/oauth2/authorize?client_id=821129463462625300&permissions=318528&scope=bot'
 
 
+# help
+@client.command(pass_context=True, aliases=['Help'])
+@commands.cooldown(1, 5, commands.BucketType.user)
+async def help(ctx):
+    async with ctx.typing():
+        embed = discord.Embed(
+            color = discord.Color.green()
+        )
+
+        embed.set_author(name="RisingHub's bot")
+        embed.set_thumbnail(url=rh_logo)
+        embed.add_field(name="Commands", value="!top, !hero, !stats, !team, !ping", inline=False)
+        embed.add_field(name="Links", value=f"[INVITE TO YOUR SERVER]({invite_link}) **|** [Rising Hub](https://risinghub.net/) \n \n Developer: <@289106753277263872>", inline=False)
+        await ctx.send(embed=embed)
+
+        
+# login 
+def login():
+    ses = requests.Session()
+    # get token
+    url1 = "https://risinghub.net/"
+    response1 = ses.get(url1)
+    soup1 = BeautifulSoup(response1.text, "html.parser")
+    token = soup1.find("input")['value']
+
+    # # login
+    url2 = "https://risinghub.net/login"
+    username, password = "discordbot", "discordbot"
+    data = f"_token={token}&username={username}&password={password}&submit="
+    headers = {
+    "content-type": "application/x-www-form-urlencoded",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
+    }
+    response2 = ses.post(url2, data=data, headers=headers)
+    return ses
+
+# stats
+@client.command(aliases=['Stats'])
+@commands.cooldown(1, 5, commands.BucketType.user)
+async def stats(ctx,*value):
+    async with ctx.typing():
+        embed = discord.Embed(
+            color = discord.Color.green()
+        )
+
+    url6 = "https://risinghub.net/stats"
+    response6 = login().get(url6)
+    soup6 = BeautifulSoup(response6.text, "lxml")
+    h6 = soup6.find_all('h5')
+    h3 = soup6.find('h3').text
+    embed.add_field(name="Stats", value=h3, inline=False)
+    for roww in h6:
+        dt = roww.find_all('dt')
+        dd = roww.find_all('dd')
+        ono = [e.text for e in dt]
+        due = [c.text for c in dd]
+        embed.set_thumbnail(url=rh_logo)
+        embed.add_field(name=f"{ono[0]}", value=f"{due[0]}", inline=True)
+        embed.set_footer(text=f"Rising Hub Stats")
+    await ctx.send(embed=embed)
+
+    
 # rising hub team
 @client.command(aliases=['Team'])
 @commands.cooldown(1, 5, commands.BucketType.user)
@@ -113,6 +160,7 @@ async def team(ctx):
         embed.set_footer(text="RisingHub Team")
         await ctx.send(embed=embed)
 
+        
 # leaderboards
 @client.command(aliases=['Top', 'TOP'])
 @commands.cooldown(1, 5, commands.BucketType.user)
@@ -126,31 +174,6 @@ async def top(ctx,*value):
         await ctx.send(embed=embed)
         return
 
-    ses = requests.Session()
-
-    # get token
-    url1 = "https://risinghub.net/"
-    try:
-        response1 = ses.get(url1)
-    except Exception:
-        print("Something went wrong")
-    soup1 = BeautifulSoup(response1.text, "html.parser")
-    token = soup1.find("input")['value']
-
-    # login
-    url2 = "https://risinghub.net/login"
-    username, password = "discordbot", "discordbot"
-    data = f"_token={token}&username={username}&password={password}&submit="
-    headers = {
-    "content-type": "application/x-www-form-urlencoded",
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
-    }
-    try:
-        response2 = ses.post(url2, data=data, headers=headers)
-    except Exception:
-        print("Something went wrong")
-
-    # function
     values = {
     "elo", "Elo",
     "score", "Score",
@@ -194,7 +217,7 @@ async def top(ctx,*value):
             pass
 
         try:
-            response3 = ses.get(url3)
+            response3 = login().get(url3)
         except Exception:
             print("Something went wrong")
         soup2 = BeautifulSoup(response3.text, "html.parser")
@@ -227,42 +250,16 @@ async def hero(ctx,*value):
         await ctx.send(embed=embed)
         return
 
-    ses = requests.Session()
-
-    # get token
-    url1 = "https://risinghub.net/"
-    try:
-        response1 = ses.get(url1)
-    except Exception:
-        print("Something went wrong")
-    soup1 = BeautifulSoup(response1.text, "html.parser")
-    token = soup1.find("input")['value']
-
-    # login
-    url2 = "https://risinghub.net/login"
-    username, password = "discordbot", "discordbot"
-    data = f"_token={token}&username={username}&password={password}&submit="
-    headers = {
-    "content-type": "application/x-www-form-urlencoded",
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
-    }
-
-    try:
-        response2 = ses.post(url2, data=data, headers=headers)
-    except Exception:
-        print("Something went wrong")
-
     if len(value) == 1:
-        if "https://risinghub.net/images/404_slider.png" in response2.text:
+        url4 = f"https://risinghub.net/profile/{value[0]}"
+        try:
+            response4 = login().get(url4)
+        except Exception:
+            print("Something went wrong")
+        if "https://risinghub.net/images/404_slider.png" in response4.text:
             embed.add_field(name="Error", value="Player not found, **!help** command for usage info.", inline=False)
             await ctx.send(embed=embed)
         else:
-            # player info
-            url4 = f"https://risinghub.net/profile/{value[0]}"
-            try:
-                response4 = ses.get(url4)
-            except Exception:
-                print("Something went wrong")
             soup4 = BeautifulSoup(response4.text, "lxml")
             try:
                 info = soup4.find('h4').text
@@ -282,11 +279,10 @@ async def hero(ctx,*value):
             await ctx.send(embed=embed)
             return
     else:
-        # function
         playername, heroname = f"{value[0]}", f"{value[1]}"
         url5 = f"https://risinghub.net/profile/{playername}/{heroname}"
         try:
-            response5 = ses.get(url5)
+            response5 = login().get(url5)
         except Exception:
             print("Something went wrong")
         if "https://risinghub.net/images/404_slider.png" in response5.text:
@@ -308,57 +304,5 @@ async def hero(ctx,*value):
                 embed.set_footer(text=f"Hero statistics for {value[1]}")
             await ctx.send(embed=embed)
 
-
-# stats
-@client.command(aliases=['Stats'])
-@commands.cooldown(1, 5, commands.BucketType.user)
-async def stats(ctx,*value):
-    async with ctx.typing():
-        embed = discord.Embed(
-            color = discord.Color.green()
-        )
-
-    ses = requests.Session()
-
-    # get token
-    url1 = "https://risinghub.net/"
-    try:
-        response1 = ses.get(url1)
-    except Exception:
-        print("Something went wrong")
-    soup1 = BeautifulSoup(response1.text, "html.parser")
-    token = soup1.find("input")['value']
-
-    # login
-    url2 = "https://risinghub.net/login"
-    username, password = "discordbot", "discordbot"
-    data = f"_token={token}&username={username}&password={password}&submit="
-    headers = {
-    "content-type": "application/x-www-form-urlencoded",
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
-    }
-
-    try:
-        response2 = ses.post(url2, data=data, headers=headers)
-    except Exception:
-        print("Something went wrong")
-
-    # function
-    url6 = "https://risinghub.net/stats"
-    response6 = ses.get(url6)
-    soup6 = BeautifulSoup(response6.text, "lxml")
-    h6 = soup6.find_all('h5')
-    h3 = soup6.find('h3').text
-    embed.add_field(name="Stats", value=h3, inline=False)
-    for roww in h6:
-        dt = roww.find_all('dt')
-        dd = roww.find_all('dd')
-        ono = [e.text for e in dt]
-        due = [c.text for c in dd]
-        embed.set_thumbnail(url=rh_logo)
-        embed.add_field(name=f"{ono[0]}", value=f"{due[0]}", inline=True)
-        embed.set_footer(text=f"Rising Hub Stats")
-    await ctx.send(embed=embed)
-
-
+            
 client.run(token)
