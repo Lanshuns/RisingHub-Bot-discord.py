@@ -5,7 +5,6 @@ Requirements:
 - python3x
 - open cmd in the same direction and type
 ``pip install -r requirements.txt``
-- risinghub account
 
 Functions:
 - help
