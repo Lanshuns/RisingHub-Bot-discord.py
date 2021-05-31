@@ -14,13 +14,13 @@ client = commands.Bot(command_prefix="!")
 client.remove_command("help")
 
 # bot token
-token = "<TOKEN_HERE>"
+token = "TOKEN_HERE"
 
 
 # on ready event & presence activity
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Game("battlefield heroes"))
+    await client.change_presence(activity=discord.Game("Battlefield Heroes"))
     print('{0.user} bot is ready'.format(client))
 
 # cooldown event
@@ -74,12 +74,10 @@ player = '''
 async def help(ctx):
     async with ctx.typing():
         embed = discord.Embed(
-            discription = "discription",
             color = discord.Color.green()
         )
 
         embed.set_thumbnail(url=rh_logo)
-        embed.set_author(name="RisingHub Bot")
         embed.add_field(name="Player statistics", value=player, inline=False)
         embed.add_field(name="Leaderboards", value=leaderboards, inline=False)
         embed.add_field(name="Other", value="**!team, !ping | [RisingHub](https://risinghub.net/)** \n \n Developer: <@289106753277263872>", inline=False)
@@ -94,7 +92,6 @@ lead = '''
 staff = '''
 [Estoniangirl](https://risinghub.net/profile/Estoniangirl)
 [Freakin](https://risinghub.net/profile/Freakin)
-[Superpaul2](https://risinghub.net/profile/Superpaul2)
 '''
 dev = '''
 [Maybeads](https://risinghub.net/profile/Maybeads)
@@ -106,7 +103,6 @@ dev = '''
 async def team(ctx):
     async with ctx.typing():
         embed = discord.Embed(
-            discription = "discription",
             color = discord.Color.green()
         )
 
@@ -123,7 +119,6 @@ async def team(ctx):
 async def top(ctx,*value):
     async with ctx.typing():
         embed = discord.Embed(
-            discription = "discription",
             color = discord.Color.green()
         )
     if not value:
@@ -155,6 +150,7 @@ async def top(ctx,*value):
     except Exception:
         print("Something went wrong")
 
+    # function
     values = {
     "elo", "Elo",
     "score", "Score",
@@ -170,31 +166,30 @@ async def top(ctx,*value):
     "prestige", "Prestige"}
 
     if value[0] in values:
-        # leaderboard
         if value[0] in ["elo", "Elo"]:
-            url3 = "https://risinghub.net/leaderboard/elo"
+            url3 = "https://risinghub.net/leaderboard/elo/any/any"
         elif value[0] in ['score', 'Score']:
-            url3 = "https://risinghub.net/leaderboard/score"
+            url3 = "https://risinghub.net/leaderboard/score/any/any"
         elif value[0] in ['level', 'Level']:
-            url3 = "https://risinghub.net/leaderboard/level"
+            url3 = "https://risinghub.net/leaderboard/level/any/any"
         elif value[0] in ["vp", "Vp", "VP"]:
-            url3 = "https://risinghub.net/leaderboard/vp"
+            url3 = "https://risinghub.net/leaderboard/vp/any/any"
         elif value[0] in ['time', 'Time']:
-            url3 = "https://risinghub.net/leaderboard/time"
+            url3 = "https://risinghub.net/leaderboard/time/any/any"
         elif value[0] in ['kills', 'Kills']:
-            url3 = "https://risinghub.net/leaderboard/kills"
+            url3 = "https://risinghub.net/leaderboard/kills/any/any"
         elif value[0] in ['assists', 'Assists']:
-            url3 = "https://risinghub.net/leaderboard/assists"
+            url3 = "https://risinghub.net/leaderboard/assists/any/any"
         elif value[0] in ['deaths', 'Deaths']:
-            url3 = "https://risinghub.net/leaderboard/deaths"
+            url3 = "https://risinghub.net/leaderboard/deaths/any/any"
         elif value[0] in ['capture', 'Capture']:
-            url3 = "https://risinghub.net/leaderboard/capture"
+            url3 = "https://risinghub.net/leaderboard/capture/any/any"
         elif value[0] in ['killstreak', 'Killstreak']:
-            url3 = "https://risinghub.net/leaderboard/kill_streak"
+            url3 = "https://risinghub.net/leaderboard/kill_streak/any/any"
         elif value[0] in ['deathstreak', 'Deathstreak']:
-            url3 = "https://risinghub.net/leaderboard/death_streak"
+            url3 = "https://risinghub.net/leaderboard/death_streak/any/any"
         elif value[0] in ['prestige', 'Prestige']:
-            url3 = "https://risinghub.net/leaderboard/prestige"
+            url3 = "https://risinghub.net/leaderboard/prestige/any/any"
         else:
             pass
 
@@ -207,7 +202,7 @@ async def top(ctx,*value):
         rows = table_body.find_all('tr')
         for index, row in enumerate(rows):
             td = row.find_all('td')
-            idx, name, score = [ele.text.strip() for ele in td]
+            idx, lvl, name, score = [ele.text.strip() for ele in td]
             if index == 10:
                 break
             embed.set_thumbnail(url=rh_logo)
@@ -220,12 +215,11 @@ async def top(ctx,*value):
 
 
 # hero info
-@client.command(aliases=['Hero'])
+@client.command(aliases=['Hero', 'Player', 'player'])
 @commands.cooldown(1, 5, commands.BucketType.user)
 async def hero(ctx,*value):
     async with ctx.typing():
         embed = discord.Embed(
-            discription = "discription",
             color = discord.Color.green()
         )
     if not value:
@@ -258,8 +252,37 @@ async def hero(ctx,*value):
     except Exception:
         print("Something went wrong")
 
-    if len(value) == 2:
-        # hero info
+    if len(value) == 1:
+        if "https://risinghub.net/images/404_slider.png" in response2.text:
+            embed.add_field(name="Error", value="Player not found, **!help** command for usage info.", inline=False)
+            await ctx.send(embed=embed)
+        else:
+            # player info
+            url4 = f"https://risinghub.net/profile/{value[0]}"
+            try:
+                response4 = ses.get(url4)
+            except Exception:
+                print("Something went wrong")
+            soup4 = BeautifulSoup(response4.text, "lxml")
+            try:
+                info = soup4.find('h4').text
+            except:
+                pass
+            status = soup4.find('td').text
+            if status == 'OFFLINE':
+                emoji = ":red_circle:"
+            else:
+                emoji = ":green_circle:"
+            embed.set_thumbnail(url=rh_logo)
+            embed.add_field(name="Status", value=f"{status} {emoji}", inline=True)
+            try:
+                embed.add_field(name="Info", value=f"{info}", inline=True)
+            except:
+                pass
+            await ctx.send(embed=embed)
+            return
+    else:
+        # function
         playername, heroname = f"{value[0]}", f"{value[1]}"
         url5 = f"https://risinghub.net/profile/{playername}/{heroname}"
         try:
@@ -275,8 +298,8 @@ async def hero(ctx,*value):
             for roww in h6:
                 dt = roww.find_all('dt')
                 dd = roww.find_all('dd')
-                ono = [e.text.strip() for e in dt]
-                due = [c.text.strip().replace(" ", "") for c in dd]
+                ono = [e.text for e in dt]
+                due = [c.text for c in dd]
                 embed.set_thumbnail(url=rh_logo)
                 try:
                     embed.add_field(name=f"{ono[0]}", value=f"{due[0]}", inline=True)
@@ -284,8 +307,58 @@ async def hero(ctx,*value):
                     pass
                 embed.set_footer(text=f"Hero statistics for {value[1]}")
             await ctx.send(embed=embed)
-    else:
-        embed.add_field(name="Error", value="Player not found, **!help** command for usage info.", inline=False)
-        await ctx.send(embed=embed)
+
+
+# stats
+@client.command(aliases=['Stats'])
+@commands.cooldown(1, 5, commands.BucketType.user)
+async def stats(ctx,*value):
+    async with ctx.typing():
+        embed = discord.Embed(
+            color = discord.Color.green()
+        )
+
+    ses = requests.Session()
+
+    # get token
+    url1 = "https://risinghub.net/"
+    try:
+        response1 = ses.get(url1)
+    except Exception:
+        print("Something went wrong")
+    soup1 = BeautifulSoup(response1.text, "html.parser")
+    token = soup1.find("input")['value']
+
+    # login
+    url2 = "https://risinghub.net/login"
+    username, password = "USERNAME_HERE", "PASSWORD_HERE"
+    data = f"_token={token}&username={username}&password={password}&submit="
+    headers = {
+    "content-type": "application/x-www-form-urlencoded",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
+    }
+
+    try:
+        response2 = ses.post(url2, data=data, headers=headers)
+    except Exception:
+        print("Something went wrong")
+
+    # function
+    url6 = "https://risinghub.net/stats"
+    response6 = ses.get(url6)
+    soup6 = BeautifulSoup(response6.text, "lxml")
+    h6 = soup6.find_all('h5')
+    h3 = soup6.find('h3').text
+    embed.add_field(name="Stats", value=h3, inline=False)
+    for roww in h6:
+        dt = roww.find_all('dt')
+        dd = roww.find_all('dd')
+        ono = [e.text for e in dt]
+        due = [c.text for c in dd]
+        embed.set_thumbnail(url=rh_logo)
+        embed.add_field(name=f"{ono[0]}", value=f"{due[0]}", inline=True)
+        embed.set_footer(text=f"Rising Hub Stats")
+    await ctx.send(embed=embed)
+
 
 client.run(token)
