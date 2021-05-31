@@ -16,6 +16,8 @@ client.remove_command("help")
 # bot token
 token = "TOKEN_HERE"
 
+# risinghub logo
+rh_logo = "https://cdn.discordapp.com/attachments/710552597886664774/821345909883011082/rh_logo.png"
 
 # on ready event & presence activity
 @client.event
@@ -41,7 +43,7 @@ async def ping(ctx):
     async with ctx.typing():
         await ctx.send(f"**{round(client.latency *1000)}** milliseconds!")
 
-# logout the bot
+# logout bot
 @client.command(hidden=False, aliases=['Kill', 'logout', 'Logout'])
 @commands.cooldown(1, 60, commands.BucketType.user)
 async def kill(ctx):
@@ -55,19 +57,6 @@ async def kill(ctx):
             await ctx.send("You don't have permission to this command.")
 
 
-# risinghub logo
-rh_logo = "https://cdn.discordapp.com/attachments/710552597886664774/821345909883011082/rh_logo.png"
-
-leaderboards = '''
-!top elo, !top score, !top level, !top vp,
-!top deaths, !top capture, !top prestige,
-!top time, !top kills, !top assists,
-!top killstreak, !top deathstreak
-'''
-player = '''
-!hero <playername> <heroname>
-'''
-
 # help
 @client.command(pass_context=True, aliases=['Help'])
 @commands.cooldown(1, 5, commands.BucketType.user)
@@ -77,13 +66,23 @@ async def help(ctx):
             color = discord.Color.green()
         )
 
+        embed.set_author(name="RisingHub's bot")
         embed.set_thumbnail(url=rh_logo)
-        embed.add_field(name="Player statistics", value=player, inline=False)
-        embed.add_field(name="Leaderboards", value=leaderboards, inline=False)
-        embed.add_field(name="Other", value="**!team, !ping | [RisingHub](https://risinghub.net/)** \n \n Developer: <@289106753277263872>", inline=False)
+        embed.add_field(name="Commands", value="!top, !hero, !stats, !team, !ping", inline=False)
+        embed.add_field(name="Links", value="[INVITE TO YOUR SERVER](https://discord.com/api/oauth2/authorize?client_id=821129463462625300&permissions=318528&scope=bot) **|** [Rising Hub](https://risinghub.net/) \n \n Developer: <@289106753277263872>", inline=False)
         await ctx.send(embed=embed)
 
 
+leaderboards = '''
+!top elo, !top score, !top level, !top vp,
+!top deaths, !top capture, !top prestige,
+!top time, !top kills, !top assists,
+!top killstreak, !top deathstreak
+'''
+player = '''
+!hero <playername> <heroname>
+!player <playername>
+'''
 lead = '''
 [DarkVenom](https://risinghub.net/profile/DarkVenom)
 [Potskard](https://risinghub.net/profile/Potskard)
@@ -96,6 +95,7 @@ staff = '''
 dev = '''
 [Maybeads](https://risinghub.net/profile/Maybeads)
 '''
+
 
 # rising hub team
 @client.command(aliases=['Team'])
@@ -122,7 +122,7 @@ async def top(ctx,*value):
             color = discord.Color.green()
         )
     if not value:
-        embed.add_field(name="Error", value="Value is not supplied, **!help** command for usage info.", inline=False)
+        embed.add_field(name="Usage", value=leaderboards, inline=False)
         await ctx.send(embed=embed)
         return
 
@@ -139,7 +139,7 @@ async def top(ctx,*value):
 
     # login
     url2 = "https://risinghub.net/login"
-    username, password = "USERNAME_HERE", "PASSWORD_HERE"
+    username, password = "discordbot", "discordbot"
     data = f"_token={token}&username={username}&password={password}&submit="
     headers = {
     "content-type": "application/x-www-form-urlencoded",
@@ -223,7 +223,7 @@ async def hero(ctx,*value):
             color = discord.Color.green()
         )
     if not value:
-        embed.add_field(name="Error", value="Value is not supplied, **!help** command for usage info.", inline=False)
+        embed.add_field(name="Usage", value=player, inline=False)
         await ctx.send(embed=embed)
         return
 
@@ -240,7 +240,7 @@ async def hero(ctx,*value):
 
     # login
     url2 = "https://risinghub.net/login"
-    username, password = "USERNAME_HERE", "PASSWORD_HERE"
+    username, password = "discordbot", "discordbot"
     data = f"_token={token}&username={username}&password={password}&submit="
     headers = {
     "content-type": "application/x-www-form-urlencoded",
@@ -331,7 +331,7 @@ async def stats(ctx,*value):
 
     # login
     url2 = "https://risinghub.net/login"
-    username, password = "USERNAME_HERE", "PASSWORD_HERE"
+    username, password = "discordbot", "discordbot"
     data = f"_token={token}&username={username}&password={password}&submit="
     headers = {
     "content-type": "application/x-www-form-urlencoded",
