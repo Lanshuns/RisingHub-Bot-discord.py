@@ -6,7 +6,7 @@ Requirements:
 - open cmd in the same direction and type
 ``pip install -r requirements.txt``
 
-Functions:
+Commands:
 - help
 - top
 - hero
