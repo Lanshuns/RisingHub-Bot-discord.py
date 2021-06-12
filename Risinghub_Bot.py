@@ -103,13 +103,19 @@ def login():
     ses = requests.Session()
     # get token
     url1 = "https://risinghub.net/"
-    response1 = ses.get(url1)
+    try:
+        response1 = ses.get(url1)
+    except Exception:
+        print("Something went wrong")
     soup1 = BeautifulSoup(response1.text, "html.parser")
     token = soup1.find("input")['value']
 
     # # login
     url2 = "https://risinghub.net/login"
-    username, password = "discordbot", "discordbot"
+    try:
+        username, password = "freefire", "omar1230"
+    except Exception:
+        print("Something went wrong")
     data = f"_token={token}&username={username}&password={password}&submit="
     headers = {
     "content-type": "application/x-www-form-urlencoded",
@@ -128,7 +134,10 @@ async def stats(ctx,*value):
         )
 
     url6 = "https://risinghub.net/stats"
-    response6 = login().get(url6)
+    try:
+        response6 = login().get(url6)
+    except Exception:
+        print("Something went wrong")
     soup6 = BeautifulSoup(response6.text, "lxml")
     h6 = soup6.find_all('h5')
     h3 = soup6.find('h3').text
