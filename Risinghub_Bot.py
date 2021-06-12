@@ -112,16 +112,16 @@ def login():
 
     # # login
     url2 = "https://risinghub.net/login"
-    try:
-        username, password = "freefire", "omar1230"
-    except Exception:
-        print("Something went wrong")
+    username, password = "freefire", "omar1230"
     data = f"_token={token}&username={username}&password={password}&submit="
     headers = {
     "content-type": "application/x-www-form-urlencoded",
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
     }
-    response2 = ses.post(url2, data=data, headers=headers)
+    try:
+        response2 = ses.post(url2, data=data, headers=headers)
+    except Exception:
+        print("Something went wrong")
     return ses
 
 # stats
