@@ -1,6 +1,4 @@
 # Risinghub_Bot-discord.py
-[RisingHub Project](https://risinghub.net/)
-
 Requirements:
 - python3x
 - open cmd in the same direction and type
