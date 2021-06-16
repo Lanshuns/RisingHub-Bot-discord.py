@@ -7,22 +7,17 @@ import asyncio
 import math
 
 
-# bot prefix
+# bot settings
 client = commands.Bot(command_prefix="!")
-
-# to remove builtin help command
 client.remove_command("help")
-
-# bot token
 token = "TOKEN_HERE"
 
-# on ready event & presence activity
+# bot events
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Game("Battlefield Heroes"))
     print('{0.user} bot is ready'.format(client))
 
-# cooldown event
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
@@ -33,7 +28,7 @@ async def on_command_error(ctx, error):
     else:
         print(error, on_command_error)
 
-# ping
+# ping command
 @client.command()
 @commands.cooldown(1, 5, commands.BucketType.user) # cooldown: 1 is the number of tries and 5 is the time in seconds
 async def ping(ctx):
@@ -53,8 +48,7 @@ async def kill(ctx):
         else:
             await ctx.send("You don't have permission to this command.")
 
-            
-# risinghub logo
+
 rh_logo = "https://cdn.discordapp.com/attachments/710552597886664774/821345909883011082/rh_logo.png"
 
 leaderboards = '''
@@ -91,14 +85,12 @@ async def help(ctx):
             color = discord.Color.green()
         )
 
-        embed.set_author(name="RisingHub's bot")
         embed.set_thumbnail(url=rh_logo)
         embed.add_field(name="Commands", value="!top, !hero, !stats, !team, !ping", inline=False)
-        embed.add_field(name="Links", value=f"[INVITE TO YOUR SERVER]({invite_link}) **|** [Rising Hub](https://risinghub.net/) \n \n Developer: <@289106753277263872>", inline=False)
+        embed.add_field(name="Links", value=f"[INVITE TO YOUR SERVER]({invite_link}) **|** [Rising Hub](https://risinghub.net/)\n\n**Developer**: <@289106753277263872>", inline=False)
         await ctx.send(embed=embed)
 
-        
-# login 
+# login &  token
 def login():
     ses = requests.Session()
     # get token
@@ -152,7 +144,6 @@ async def stats(ctx,*value):
         embed.set_footer(text=f"Rising Hub Stats")
     await ctx.send(embed=embed)
 
-    
 # rising hub team
 @client.command(aliases=['Team'])
 @commands.cooldown(1, 5, commands.BucketType.user)
@@ -169,7 +160,6 @@ async def team(ctx):
         embed.set_footer(text="RisingHub Team")
         await ctx.send(embed=embed)
 
-        
 # leaderboards
 @client.command(aliases=['Top', 'TOP'])
 @commands.cooldown(1, 5, commands.BucketType.user)
@@ -313,5 +303,5 @@ async def hero(ctx,*value):
                 embed.set_footer(text=f"Hero statistics for {value[1]}")
             await ctx.send(embed=embed)
 
-            
+
 client.run(token)
