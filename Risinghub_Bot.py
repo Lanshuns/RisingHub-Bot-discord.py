@@ -129,7 +129,9 @@ async def stats(ctx,*value):
     try:
         response6 = login().get(url6)
     except Exception:
-        print("Something went wrong")
+        await ctx.send("Something went wrong")
+        return
+
     soup6 = BeautifulSoup(response6.text, "lxml")
     h6 = soup6.find_all('h5')
     h3 = soup6.find('h3').text
@@ -218,7 +220,9 @@ async def top(ctx,*value):
         try:
             response3 = login().get(url3)
         except Exception:
-            print("Something went wrong")
+            await ctx.send("Something went wrong")
+            return
+
         soup2 = BeautifulSoup(response3.text, "html.parser")
         table_body = soup2.find('tbody')
         rows = table_body.find_all('tr')
@@ -254,7 +258,9 @@ async def hero(ctx,*value):
         try:
             response4 = login().get(url4)
         except Exception:
-            print("Something went wrong")
+            await ctx.send("Something went wrong")
+            return
+
         if "https://risinghub.net/images/404_slider.png" in response4.text:
             embed.add_field(name="Error", value="Player not found, **!help** command for usage info.", inline=False)
             await ctx.send(embed=embed)
@@ -283,7 +289,9 @@ async def hero(ctx,*value):
         try:
             response5 = login().get(url5)
         except Exception:
-            print("Something went wrong")
+            await ctx.send("Something went wrong")
+            return
+            
         if "https://risinghub.net/images/404_slider.png" in response5.text:
             embed.add_field(name="Error", value="Player not found, **!help** command for usage info.", inline=False)
             await ctx.send(embed=embed)
