@@ -104,7 +104,7 @@ def login():
 
     # # login
     url2 = "https://risinghub.net/login"
-    username, password = "freefire", "omar1230"
+    username, password = "u_discordbot", "p_discordbot"
     data = f"_token={token}&username={username}&password={password}&submit="
     headers = {
     "content-type": "application/x-www-form-urlencoded",
