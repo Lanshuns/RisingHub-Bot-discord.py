@@ -27,7 +27,7 @@ def login():
     token = soup.find("input")['value']
 
     # Login
-    username, password = "asdfasdf", "asdfasdf"
+    username, password = "username", "password"
     payload = f"_token={token}&username={username}&password={password}&submit="
     try:
         response2 = session.post("https://pte.risinghub.net/login", data=payload, headers=headers)
