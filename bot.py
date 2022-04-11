@@ -23,7 +23,7 @@ def login():
     except Exception as error:
         print(f"Logging: {error}")
 
-    soup = BeautifulSoup(response1.text, "html.parser")
+    soup = BeautifulSoup(response1.text, "lxml")
     token = soup.find("input")['value']
 
     # Login
