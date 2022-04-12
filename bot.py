@@ -226,7 +226,9 @@ async def profile(ctx,*value):
             await ctx.send("Player was not found!")
         else:
             soup = BeautifulSoup(response.text, "lxml")
-            status = soup.find('td').text
+            name_and_status = soup.find(class_="pull-left")
+            username =  name_and_status.text.split(" ")[0]
+            status = name_and_status.text.split(" ")[2]
           
             if status == 'OFFLINE':
                 emoji = ":red_circle:"
@@ -247,7 +249,7 @@ async def profile(ctx,*value):
             level_text = soup.find_all("h6")[1].text ; total_level = re.search(r"\d+", level_text).group()
             created_text = soup.find_all("h6")[2].text.lstrip(" ") ; days = re.search(r"\d+", created_text).group() ; years = int(days) // 365
 
-            embed = discord.Embed(title = f"{value[0]}'s profile", url=f"https://risinghub.net/profile/{value[0]}", description=info, color = discord.Color.green())
+            embed = discord.Embed(title = f"{username}'s profile", url=f"https://risinghub.net/profile/{value[0]}", description=info, color = discord.Color.green())
             embed.set_thumbnail(url=rh_logo)
             embed.add_field(name="Status", value=f"{status} {emoji}", inline=False)
             embed.add_field(name="Heros", value=f"{heroes}**Total heroes level**: {total_level}", inline=False)
