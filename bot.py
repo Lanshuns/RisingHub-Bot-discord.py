@@ -1,11 +1,11 @@
 from discord.ext import commands
 from bs4 import BeautifulSoup
+import httpx
 import discord
 import asyncio
-import httpx
 import math
-import json
 import re
+import json
 import os
 
 
@@ -27,7 +27,7 @@ def login():
     token = soup.find("input")['value']
 
     # Login
-    username, password = "username", "password"
+    username, password = "username", "paswword"
     payload = f"_token={token}&username={username}&password={password}&submit="
     try:
         response2 = session.post("https://pte.risinghub.net/login", data=payload, headers=headers)
@@ -41,7 +41,7 @@ def login():
 rh_logo = "https://risinghub.net/images/rh_logo.png"
 bot = commands.Bot(command_prefix="!")
 bot.remove_command("help")
-token = "Token"
+token = "TOKEN"
 
 
 @bot.event
@@ -171,6 +171,7 @@ async def top(ctx,*value):
         }
         if value[0] in values:
             url = f"https://pte.risinghub.net/leaderboard/{value[0]}/any/any"
+
             session = login()
             headers = {
               "content-type": "application/x-www-form-urlencoded",
@@ -237,15 +238,19 @@ async def profile(ctx,*value):
             else:
                 info = ""
 
+            heroes = ""
+            names = soup.find_all(class_="hero-content shadow-2")
+            for index, name in enumerate(names, start=1):
+                all_heroes = name.a.text
+                heroes += f"[{index}] {all_heroes}\n"
+          
             level_text = soup.find_all("h6")[1].text ; total_level = re.search(r"\d+", level_text).group()
             created_text = soup.find_all("h6")[2].text.lstrip(" ") ; days = re.search(r"\d+", created_text).group() ; years = int(days) // 365
-            total_heros = soup.find_all(class_="hero-content shadow-2")
 
             embed = discord.Embed(title = f"{value[0]}'s profile", url=f"https://risinghub.net/profile/{value[0]}", description=info, color = discord.Color.green())
             embed.set_thumbnail(url=rh_logo)
             embed.add_field(name="Status", value=f"{status} {emoji}", inline=False)
-            embed.add_field(name="Total Hero level", value=f"{total_level}", inline=False)
-            embed.add_field(name="Total Heros", value=f"{len(total_heros)}", inline=False)
+            embed.add_field(name="Heros", value=f"{heroes}**Total heroes level**: {total_level}", inline=False)
             embed.add_field(name="Creation Time", value=f"{days} days, `{years} years ago`", inline=False)
             await ctx.send(embed=embed)
 
