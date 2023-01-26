@@ -84,7 +84,7 @@ async def restart(ctx):
     if author == ctx.author.id:
         await ctx.respond("Restarting...")
         await ctx.bot.logout()
-        os.system('python main.py')
+        os.system('python bot.py')
     else:
         await ctx.respond("You don't have permission to this command.")
 
